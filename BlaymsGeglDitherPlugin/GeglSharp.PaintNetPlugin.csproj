@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net9.0-windows</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <EnableWindowsTargeting>true</EnableWindowsTargeting>
+    <RootNamespace>BlaymsGeglDitherPlugin</RootNamespace>
+    <AssemblyName>GeglSharp.PaintNetPlugin</AssemblyName>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <LangVersion>latest</LangVersion>
+    <ProduceReferenceAssembly>false</ProduceReferenceAssembly>
+    <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="PaintDotNet.Plugin.SDK" Version="5.1.*" />
+    <ProjectReference Include="..\GeglSharp\GeglSharp.csproj" />
+  </ItemGroup>
+  <PropertyGroup>
+    <PaintNetEffectsDir Condition="'$(PaintNetEffectsDir)' == ''"></PaintNetEffectsDir>
+  </PropertyGroup>
+  <Target Name="DeployToPaintNet" AfterTargets="Build" Condition="'$(PaintNetEffectsDir)' != ''">
+    <MakeDir Directories="$(PaintNetEffectsDir)" />
+    <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(PaintNetEffectsDir)" />
+    <Copy SourceFiles="$(TargetDir)GeglSharp.dll" DestinationFolder="$(PaintNetEffectsDir)" Condition="Exists('$(TargetDir)GeglSharp.dll')" />
+    <Copy SourceFiles="$(TargetDir)GeglSharp.PaintNetPlugin.deps.json" DestinationFolder="$(PaintNetEffectsDir)" Condition="Exists('$(TargetDir)GeglSharp.PaintNetPlugin.deps.json')" />
+  </Target>
+</Project>
